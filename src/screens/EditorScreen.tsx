@@ -287,6 +287,8 @@ export const EditorScreen = ({ route, navigation }: any) => {
             <View style={styles.tagsGrid}>
               {MOOD_TAG_OPTIONS.map(tag => {
                 const isSelected = selectedTags.includes(tag);
+                const translatedTag = t('tag.' + tag.toLowerCase());
+                const displayTag = translatedTag !== 'tag.' + tag.toLowerCase() ? translatedTag : tag;
                 return (
                   <TouchableOpacity
                     key={tag}
@@ -295,7 +297,7 @@ export const EditorScreen = ({ route, navigation }: any) => {
                     activeOpacity={0.8}
                   >
                     <Text style={[styles.tagChipText, isSelected && styles.tagChipTextSelected]}>
-                      #{tag.toLowerCase()}
+                      #{displayTag.toLowerCase()}
                     </Text>
                   </TouchableOpacity>
                 );

@@ -12,6 +12,7 @@ import {
 import { Sparkles, X, ChevronRight, Copy, Check } from 'lucide-react-native';
 import { theme } from '../theme/theme';
 import { AI_SUGGESTIONS } from '../services/mockData';
+import { useTranslation } from '../i18n/LanguageContext';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -26,6 +27,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
   onClose,
   onApplySuggestion,
 }) => {
+  const { t, language } = useTranslation();
   const [activeTab, setActiveTab] = useState<'twists' | 'titles' | 'moods' | 'grammar'>('twists');
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
@@ -77,20 +79,22 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
   const renderContentList = () => {
     let items: { text: string; subText?: string }[] = [];
 
+    const suggestions = AI_SUGGESTIONS[language] || AI_SUGGESTIONS['en'];
+
     switch (activeTab) {
       case 'twists':
-        items = AI_SUGGESTIONS.plotTwists.map(t => ({ text: t }));
+        items = suggestions.plotTwists.map(t => ({ text: t }));
         break;
       case 'titles':
-        items = AI_SUGGESTIONS.titles.map(t => ({ text: t }));
+        items = suggestions.titles.map(t => ({ text: t }));
         break;
       case 'moods':
-        items = AI_SUGGESTIONS.moodWords.map(m => ({ text: m, subText: 'Mood tag suggestion' }));
+        items = suggestions.moodWords.map(m => ({ text: m, subText: t('ai.moodTagSuggestion') }));
         break;
       case 'grammar':
-        items = AI_SUGGESTIONS.grammarCorrections.map(c => ({
+        items = suggestions.grammarCorrections.map(c => ({
           text: c.suggestion,
-          subText: `Original: "${c.original}"`,
+          subText: `${t('ai.original')}: "${c.original}"`,
         }));
         break;
     }
@@ -140,7 +144,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         <View style={styles.header}>
           <View style={styles.headerTitle}>
             <Sparkles size={20} color={theme.colors.primary} />
-            <Text style={styles.titleText}>AI Writer Assistance</Text>
+            <Text style={styles.titleText}>{t('ai.title')}</Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeButton} activeOpacity={0.7}>
             <X size={20} color={theme.colors.textSecondary} />
@@ -157,7 +161,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
               activeOpacity={0.7}
             >
               <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {t(`ai.tab.${tab}`)}
               </Text>
             </TouchableOpacity>
           ))}
@@ -166,7 +170,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         {/* Content Area */}
         <View style={styles.contentContainer}>
           <Text style={styles.helpText}>
-            Tap any suggestion below to insert it into your story.
+            {t('ai.help')}
           </Text>
           {renderContentList()}
         </View>

@@ -138,24 +138,48 @@ export const MOCK_BATTLES: Battle[] = [];
 
 // Context-aware AI suggestions helper
 export const AI_SUGGESTIONS = {
-  titles: [
-    'The Echo of a Billion Years',
-    'Chamber of the Unheard',
-    'Lead in the Throat',
-    'Bypassing the Frost',
-    'Luminous Monuments',
-    'A Tear in the Dome',
-  ],
-  plotTwists: [
-    'The elevator doesn’t belong to this building; it is a vertical train crossing dimensions.',
-    'The transmission isn’t from a dead star, it is a delayed reflection of our own future space probe.',
-    'The shadow isn’t looking at her; it is staring in horror at something standing directly behind her.',
-    'The machine guarding the tree is actually the one keeping it frozen in stasis to prevent it from speaking.',
-    'The elevator is moving sideways, not vertically.',
-  ],
-  moodWords: ['Obsidian', 'Fragile', 'Stagnant', 'Cinematic', 'Haunting', 'Vibrant', 'Vague', 'Aether'],
-  grammarCorrections: [
-    { original: 'The shadow on the wall moved a second after she did.', suggestion: 'The wall-bound shadow crept a second after she moved, deliberate and slow.' },
-    { original: 'We only had five minutes left.', suggestion: 'A mere five minutes remained on the digital dial.' }
-  ]
+  en: {
+    titles: [
+      'The Echo of a Billion Years',
+      'Chamber of the Unheard',
+      'Lead in the Throat',
+      'Bypassing the Frost',
+      'Luminous Monuments',
+      'A Tear in the Dome',
+    ],
+    plotTwists: [
+      'The elevator doesn’t belong to this building; it is a vertical train crossing dimensions.',
+      'The transmission isn’t from a dead star, it is a delayed reflection of our own future space probe.',
+      'The shadow isn’t looking at her; it is staring in horror at something standing directly behind her.',
+      'The machine guarding the tree is actually the one keeping it frozen in stasis to prevent it from speaking.',
+      'The elevator is moving sideways, not vertically.',
+    ],
+    moodWords: ['Obsidian', 'Fragile', 'Stagnant', 'Cinematic', 'Haunting', 'Vibrant', 'Vague', 'Aether'],
+    grammarCorrections: [
+      { original: 'The shadow on the wall moved a second after she did.', suggestion: 'The wall-bound shadow crept a second after she moved, deliberate and slow.' },
+      { original: 'We only had five minutes left.', suggestion: 'A mere five minutes remained on the digital dial.' }
+    ]
+  },
+  fr: {
+    titles: [
+      'L’écho d’un milliard d’années',
+      'La chambre des inaudibles',
+      'Du plomb dans la gorge',
+      'Contourner le gel',
+      'Monuments lumineux',
+      'Une larme dans le dôme',
+    ],
+    plotTwists: [
+      'L’ascenseur n’appartient pas à cet immeuble ; c’est un train vertical traversant les dimensions.',
+      'La transmission ne provient pas d’une étoile morte, c’est un reflet différé de notre propre future sonde spatiale.',
+      'L’ombre ne la regarde pas ; elle fixe avec horreur quelque chose qui se tient juste derrière elle.',
+      'La machine qui garde l’arbre est en réalité celle qui le maintient gelé en stase pour l’empêcher de parler.',
+      'L’ascenseur se déplace latéralement, pas verticalement.',
+    ],
+    moodWords: ['Obsidienne', 'Fragile', 'Stagnant', 'Cinématique', 'Hantant', 'Vibrant', 'Vague', 'Éther'],
+    grammarCorrections: [
+      { original: "L'ombre sur le mur a bougé une seconde après elle.", suggestion: "L'ombre figée au mur a glissé une seconde après ses mouvements, lente et délibérée." },
+      { original: "Il ne nous restait plus que cinq minutes.", suggestion: "À peine cinq minutes subsistaient sur le cadran numérique." }
+    ]
+  }
 };

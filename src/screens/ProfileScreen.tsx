@@ -208,7 +208,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                     {getBadgeIcon(badge.icon, badgeColor)}
                   </View>
                   <Text style={[styles.badgeName, !isUnlocked && styles.badgeNameLocked]} numberOfLines={1}>
-                    {badge.name}
+                    {t('badge.' + badge.id + '.name')}
                   </Text>
                 </TouchableOpacity>
               );
@@ -294,11 +294,11 @@ export const ProfileScreen = ({ navigation }: any) => {
               <View style={[styles.badgeModalIconBg, { backgroundColor: selectedBadge.unlockedAt ? 'rgba(255,176,32,0.1)' : 'rgba(255,255,255,0.03)' }]}>
                 {getBadgeIcon(selectedBadge.icon, selectedBadge.unlockedAt ? theme.colors.gold : theme.colors.textMuted)}
               </View>
-              <Text style={styles.badgeModalName}>{selectedBadge.name}</Text>
+              <Text style={styles.badgeModalName}>{t('badge.' + selectedBadge.id + '.name')}</Text>
               <Text style={styles.badgeModalStatus}>
                 {selectedBadge.unlockedAt ? t('profile.badgeUnlocked', { date: new Date(selectedBadge.unlockedAt).toLocaleDateString() }) : t('profile.badgeLocked')}
               </Text>
-              <Text style={styles.badgeModalDesc}>{selectedBadge.description}</Text>
+              <Text style={styles.badgeModalDesc}>{t('badge.' + selectedBadge.id + '.desc')}</Text>
               <Text style={styles.badgeModalXp}>{t('profile.badgeXp', { xp: selectedBadge.xpValue })}</Text>
               
               <Button

@@ -36,6 +36,20 @@ export const translations: Record<Language, Record<string, string>> = {
     'genre.funny': 'Funny',
     'genre.romance': 'Romance',
 
+    // Tags
+    'tag.melancholic': 'Melancholic',
+    'tag.eerie': 'Eerie',
+    'tag.hopeful': 'Hopeful',
+    'tag.romantic': 'Romantic',
+    'tag.absurd': 'Absurd',
+    'tag.tense': 'Tense',
+    'tag.poetic': 'Poetic',
+    'tag.relatable': 'Relatable',
+    'tag.cinematic': 'Cinematic',
+    'tag.mysterious': 'Mysterious',
+    'tag.dark': 'Dark',
+    'tag.dystopian': 'Dystopian',
+
     // Goal labels
     'goal.daily.label': 'Daily Muse',
     'goal.daily.sub': 'Write 1 short story every day',
@@ -51,6 +65,12 @@ export const translations: Record<Language, Record<string, string>> = {
     'home.taglineQuote': '"Ink Drop — Small stories. Infinite imagination."',
     'home.taglineSub': 'Every day brings a fresh constraint. Challenge your creativity in under 300 words.',
     'home.inspirationTitle': 'Inspiration & Focus',
+    'home.inspiration.1.text': 'Write without editing. Let the first draft be messy.',
+    'home.inspiration.1.author': 'Ernest Hemingway',
+    'home.inspiration.2.text': 'Focus on one sensory detail: the smell of damp brick, the metallic tang of fear.',
+    'home.inspiration.2.author': 'Writing Prompt Academy',
+    'home.inspiration.3.text': 'A micro-story needs a beginning, a middle, and a twist that changes the context.',
+    'home.inspiration.3.author': 'Ink Drop Council',
     'home.xpTip': 'Publishing stories awards +100 XP. Voting in battles awards +25 XP.',
 
     // ──── Editor ────
@@ -77,6 +97,16 @@ export const translations: Record<Language, Record<string, string>> = {
     'editor.successTitle': 'Story Published!',
     'editor.successXp': '+100 XP Earned',
     'editor.successSub': 'Your words have been spilled onto the canvas.',
+
+    // AI Assistant
+    'ai.title': 'AI Writer Assistance',
+    'ai.help': 'Tap any suggestion below to insert it into your story.',
+    'ai.moodTagSuggestion': 'Mood tag suggestion',
+    'ai.original': 'Original',
+    'ai.tab.twists': 'Twists',
+    'ai.tab.titles': 'Titles',
+    'ai.tab.moods': 'Moods',
+    'ai.tab.grammar': 'Grammar',
 
     // ──── Feed / Explore ────
     'feed.title': 'Explore Drops',
@@ -147,9 +177,21 @@ export const translations: Record<Language, Record<string, string>> = {
     'profile.deleteDraftBody': 'Are you sure you want to delete this draft?',
     'profile.delete': 'Delete',
     'profile.badgeLocked': 'LOCKED',
-    'profile.badgeUnlocked': 'Unlocked on',
+    'profile.badgeUnlocked': 'Unlocked on {{date}}',
     'profile.badgeXp': 'Unlocks {{xp}} Bonus XP',
     'profile.dismiss': 'Dismiss',
+    'badge.1.name': 'Ink Spiller',
+    'badge.1.desc': 'Wrote your very first micro-story.',
+    'badge.2.name': 'Midnight Muse',
+    'badge.2.desc': 'Saved or published a draft between 12 AM and 4 AM.',
+    'badge.3.name': 'Word Artisan',
+    'badge.3.desc': 'Reached a writing level of 5.',
+    'badge.4.name': 'Streak Scribe',
+    'badge.4.desc': 'Maintained a 5-day creative writing streak.',
+    'badge.5.name': 'Battle Victor',
+    'badge.5.desc': 'Won your first story battle matchup.',
+    'badge.6.name': 'Critic Heart',
+    'badge.6.desc': 'Left 10 thoughtful comments on peer stories.',
 
     // Ranks
     'rank.1': 'Novice Inkwell',
@@ -239,6 +281,20 @@ export const translations: Record<Language, Record<string, string>> = {
     'genre.funny': 'Humour',
     'genre.romance': 'Romance',
 
+    // Tags
+    'tag.melancholic': 'Mélancolique',
+    'tag.eerie': 'Étrange',
+    'tag.hopeful': 'Plein d\'espoir',
+    'tag.romantic': 'Romantique',
+    'tag.absurd': 'Absurde',
+    'tag.tense': 'Tendu',
+    'tag.poetic': 'Poétique',
+    'tag.relatable': 'Familier',
+    'tag.cinematic': 'Cinématique',
+    'tag.mysterious': 'Mystérieux',
+    'tag.dark': 'Sombre',
+    'tag.dystopian': 'Dystopique',
+
     // Goal labels
     'goal.daily.label': 'Muse Quotidienne',
     'goal.daily.sub': 'Écrire 1 courte histoire chaque jour',
@@ -254,6 +310,12 @@ export const translations: Record<Language, Record<string, string>> = {
     'home.taglineQuote': '«\u00A0Ink Drop — Petites histoires. Imagination infinie.\u00A0»',
     'home.taglineSub': 'Chaque jour apporte une nouvelle contrainte. Défiez votre créativité en moins de 300 mots.',
     'home.inspirationTitle': 'Inspiration & Concentration',
+    'home.inspiration.1.text': 'Écrivez sans éditer. Laissez le premier jet être imparfait.',
+    'home.inspiration.1.author': 'Ernest Hemingway',
+    'home.inspiration.2.text': 'Concentrez-vous sur un détail sensoriel : l\'odeur de la brique humide, le goût métallique de la peur.',
+    'home.inspiration.2.author': 'Writing Prompt Academy',
+    'home.inspiration.3.text': 'Une micro-histoire a besoin d\'un début, d\'un milieu et d\'un rebondissement qui change le contexte.',
+    'home.inspiration.3.author': 'Conseil Ink Drop',
     'home.xpTip': 'Publier une histoire rapporte +100 XP. Voter dans un duel rapporte +25 XP.',
 
     // ──── Editor ────
@@ -280,6 +342,16 @@ export const translations: Record<Language, Record<string, string>> = {
     'editor.successTitle': 'Histoire publiée !',
     'editor.successXp': '+100 XP gagnés',
     'editor.successSub': 'Vos mots ont été versés sur la toile.',
+
+    // AI Assistant
+    'ai.title': 'Assistant d\'Écriture IA',
+    'ai.help': 'Appuyez sur une suggestion ci-dessous pour l\'insérer dans votre histoire.',
+    'ai.moodTagSuggestion': 'Suggestion de tag d\'ambiance',
+    'ai.original': 'Original',
+    'ai.tab.twists': 'Rebondissements',
+    'ai.tab.titles': 'Titres',
+    'ai.tab.moods': 'Ambiances',
+    'ai.tab.grammar': 'Grammaire',
 
     // ──── Feed / Explore ────
     'feed.title': 'Explorer les Drops',
@@ -350,9 +422,21 @@ export const translations: Record<Language, Record<string, string>> = {
     'profile.deleteDraftBody': 'Êtes-vous sûr de vouloir supprimer ce brouillon ?',
     'profile.delete': 'Supprimer',
     'profile.badgeLocked': 'VERROUILLÉ',
-    'profile.badgeUnlocked': 'Débloqué le',
+    'profile.badgeUnlocked': 'Débloqué le {{date}}',
     'profile.badgeXp': 'Débloque {{xp}} XP bonus',
     'profile.dismiss': 'Fermer',
+    'badge.1.name': 'Encre Versée',
+    'badge.1.desc': 'A écrit sa toute première micro-histoire.',
+    'badge.2.name': 'Muse de Minuit',
+    'badge.2.desc': 'A sauvegardé ou publié un brouillon entre minuit et 4h du matin.',
+    'badge.3.name': 'Artisan des Mots',
+    'badge.3.desc': 'A atteint le niveau d\'écriture 5.',
+    'badge.4.name': 'Scribe Assidu',
+    'badge.4.desc': 'A maintenu une série d\'écriture de 5 jours.',
+    'badge.5.name': 'Vainqueur de Duel',
+    'badge.5.desc': 'A remporté son premier duel d\'histoires.',
+    'badge.6.name': 'Cœur Critique',
+    'badge.6.desc': 'A laissé 10 commentaires pertinents sur les histoires de ses pairs.',
 
     // Ranks
     'rank.1': 'Encrier Novice',

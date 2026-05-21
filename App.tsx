@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet, Platform, Text } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Platform, Text, Keyboard } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -88,9 +88,14 @@ const MainTabs = () => {
           height: Platform.OS === 'ios' ? 88 : 64,
           paddingTop: 8,
           paddingBottom: Platform.OS === 'ios' ? 24 : 8,
+          // Always keep the tab bar visible above the keyboard
+          keyboardHidesTabBar: false,
         },
         headerShown: false,
       })}
+      screenListeners={{
+        tabPress: () => Keyboard.dismiss(),
+      }}
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: t('tab.home') }} />
       <Tab.Screen name="Explore" component={FeedScreen} options={{ tabBarLabel: t('tab.explore') }} />

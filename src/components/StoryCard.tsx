@@ -54,11 +54,15 @@ export const StoryCard: React.FC<StoryCardProps> = ({
 
         {/* Mood Tags */}
         <View style={styles.tagsContainer}>
-          {story.moodTags.map((tag, idx) => (
-            <View key={idx} style={styles.tag}>
-              <Text style={styles.tagText}>#{tag.toLowerCase()}</Text>
-            </View>
-          ))}
+          {story.moodTags.map((tag, idx) => {
+            const translatedTag = t('tag.' + tag.toLowerCase());
+            const displayTag = translatedTag !== 'tag.' + tag.toLowerCase() ? translatedTag : tag;
+            return (
+              <View key={idx} style={styles.tag}>
+                <Text style={styles.tagText}>#{displayTag.toLowerCase()}</Text>
+              </View>
+            );
+          })}
         </View>
       </TouchableOpacity>
 

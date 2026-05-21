@@ -34,9 +34,9 @@ export const HomeScreen = ({ navigation }: any) => {
 
   // Immersive writing prompts tips
   const INSPIRATIONS = [
-    { text: "Write without editing. Let the first draft be messy.", author: "Ernest Hemingway" },
-    { text: "Focus on one sensory detail: the smell of damp brick, the metallic tang of fear.", author: "Writing Prompt Academy" },
-    { text: "A micro-story needs a beginning, a middle, and a twist that changes the context.", author: "Ink Drop Council" }
+    { text: t('home.inspiration.1.text'), author: t('home.inspiration.1.author') },
+    { text: t('home.inspiration.2.text'), author: t('home.inspiration.2.author') },
+    { text: t('home.inspiration.3.text'), author: t('home.inspiration.3.author') }
   ];
 
   return (
