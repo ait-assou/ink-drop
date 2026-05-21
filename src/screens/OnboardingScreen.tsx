@@ -5,7 +5,9 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   ScrollView,
   Dimensions
@@ -81,28 +83,30 @@ export const OnboardingScreen = () => {
           <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
         </View>
 
-        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
           
           {step === 0 && (
-            <View style={styles.stepContainer}>
-              <View style={styles.iconContainer}>
-                <Sparkles size={40} color={theme.colors.primary} />
-              </View>
-              <Text style={styles.tagline}>{t('onboarding.tagline')}</Text>
-              <Text style={styles.heading}>{t('onboarding.step1.heading')}</Text>
-              <Text style={styles.subheading}>{t('onboarding.step1.sub')}</Text>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.stepContainer}>
+                <View style={styles.iconContainer}>
+                  <Sparkles size={40} color={theme.colors.primary} />
+                </View>
+                <Text style={styles.tagline}>{t('onboarding.tagline')}</Text>
+                <Text style={styles.heading}>{t('onboarding.step1.heading')}</Text>
+                <Text style={styles.subheading}>{t('onboarding.step1.sub')}</Text>
 
-              <TextInput
-                style={styles.input}
-                placeholder={t('onboarding.step1.placeholder')}
-                placeholderTextColor={theme.colors.textMuted}
-                value={username}
-                onChangeText={setUsername}
-                maxLength={20}
-                autoFocus
-                autoCorrect={false}
-              />
-            </View>
+                <TextInput
+                  style={styles.input}
+                  placeholder={t('onboarding.step1.placeholder')}
+                  placeholderTextColor={theme.colors.textMuted}
+                  value={username}
+                  onChangeText={setUsername}
+                  maxLength={20}
+                  autoFocus
+                  autoCorrect={false}
+                />
+              </View>
+            </TouchableWithoutFeedback>
           )}
 
           {step === 1 && (

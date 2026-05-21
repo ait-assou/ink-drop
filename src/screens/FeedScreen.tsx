@@ -7,9 +7,11 @@ import {
   Modal,
   SafeAreaView,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   TextInput,
   Image,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   ScrollView
 } from 'react-native';
@@ -153,21 +155,23 @@ export const FeedScreen = ({ navigation }: any) => {
           onRequestClose={handleCloseStory}
         >
           <SafeAreaView style={styles.modalContainer}>
-            {/* Modal Header */}
-            <View style={styles.modalHeader}>
-              <TouchableOpacity onPress={handleCloseStory} style={styles.closeButton}>
-                <ArrowLeft size={22} color={theme.colors.text} />
-              </TouchableOpacity>
-              <Text style={styles.modalHeaderTitle}>{t('feed.story')}</Text>
-              <View style={{ width: 40 }} />
-            </View>
+            {/* Modal Header — tap to dismiss keyboard */}
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.modalHeader}>
+                <TouchableOpacity onPress={handleCloseStory} style={styles.closeButton}>
+                  <ArrowLeft size={22} color={theme.colors.text} />
+                </TouchableOpacity>
+                <Text style={styles.modalHeaderTitle}>{t('feed.story')}</Text>
+                <View style={{ width: 40 }} />
+              </View>
+            </TouchableWithoutFeedback>
 
             <KeyboardAvoidingView
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
               style={{ flex: 1 }}
               keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
             >
-              <ScrollView contentContainerStyle={styles.modalScroll} showsVerticalScrollIndicator={false}>
+              <ScrollView contentContainerStyle={styles.modalScroll} showsVerticalScrollIndicator={false} keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled">
                 {/* Main Story Info Card */}
                 <StoryCard
                   story={activeStory}

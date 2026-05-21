@@ -7,13 +7,14 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Alert,
   Modal,
   ScrollView,
-  Animated
+  Animated,
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, Sparkles, Trash2, Send, Bookmark, Info, CheckCircle2 } from 'lucide-react-native';
+import { ArrowLeft, Sparkles, Trash2, Send, Bookmark, Info, CheckCircle2, ChevronDown } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../i18n/LanguageContext';
 import { theme } from '../theme/theme';
@@ -21,6 +22,7 @@ import { AIAssistant } from '../components/AIAssistant';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { HighlightText } from '../components/HighlightText';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { getLocalizedPrompt } from '../utils/promptHelpers';
 const MOOD_TAG_OPTIONS = [
   'Melancholic', 'Eerie', 'Hopeful', 'Romantic', 'Absurd',
@@ -39,6 +41,33 @@ export const EditorScreen = ({ route, navigation }: any) => {
   const [isSubmitModalVisible, setIsSubmitModalVisible] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  // Dialog states
+  const [isClearDialogVisible, setIsClearDialogVisible] = useState(false);
+  const [isTagLimitDialogVisible, setIsTagLimitDialogVisible] = useState(false);
+  const [isLengthDialogVisible, setIsLengthDialogVisible] = useState(false);
+
+  // Track keyboard visibility to show dismiss button
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const showSubscription2 = Keyboard.addListener('keyboardWillShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+    const hideSubscription2 = Keyboard.addListener('keyboardWillHide', () => {
+      setIsKeyboardVisible(false);
+    });
+    return () => {
+      showSubscription.remove();
+      showSubscription2.remove();
+      hideSubscription.remove();
+      hideSubscription2.remove();
+    };
+  }, []);
 
   const wordCount = content.trim() === '' ? 0 : content.trim().split(/\s+/).length;
   
@@ -85,21 +114,7 @@ export const EditorScreen = ({ route, navigation }: any) => {
   };
 
   const handleClear = () => {
-    Alert.alert(
-      t('editor.clearConfirmTitle'),
-      t('editor.clearConfirmBody'),
-      [
-        { text: t('editor.cancel'), style: 'cancel' },
-        {
-          text: t('editor.clear'),
-          style: 'destructive',
-          onPress: () => {
-            setContent('');
-            saveDraft(prompt.id, '');
-          },
-        },
-      ]
-    );
+    setIsClearDialogVisible(true);
   };
 
   const handleApplyAiSuggestion = (suggestion: string) => {
@@ -117,7 +132,7 @@ export const EditorScreen = ({ route, navigation }: any) => {
       setSelectedTags(selectedTags.filter(t => t !== tag));
     } else {
       if (selectedTags.length >= 3) {
-        Alert.alert(t('editor.tagLimitTitle'), t('editor.tagLimitBody'));
+        setIsTagLimitDialogVisible(true);
         return;
       }
       setSelectedTags([...selectedTags, tag]);
@@ -126,7 +141,7 @@ export const EditorScreen = ({ route, navigation }: any) => {
 
   const handlePublish = async () => {
     if (wordCount < 50 || wordCount > 300) {
-      Alert.alert(t('editor.invalidLengthTitle'), t('editor.invalidLengthBody'));
+      setIsLengthDialogVisible(true);
       return;
     }
     
@@ -227,16 +242,28 @@ export const EditorScreen = ({ route, navigation }: any) => {
             </Text>
           </View>
 
-          {/* Minimal visual progress bars */}
-          <View style={styles.progressContainer}>
-            {wordCount < 50 ? (
-              <View style={styles.progressBarBg}>
-                <View style={[styles.progressBarFillWarning, { width: `${wordCountProgress}%` }]} />
-              </View>
-            ) : (
-              <View style={styles.progressBarBg}>
-                <View style={[styles.progressBarFillSuccess, { width: `${wordLimitProgress}%` }]} />
-              </View>
+          {/* Minimal visual progress bars & keyboard dismiss */}
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.progressContainer}>
+              {wordCount < 50 ? (
+                <View style={styles.progressBarBg}>
+                  <View style={[styles.progressBarFillWarning, { width: `${wordCountProgress}%` }]} />
+                </View>
+              ) : (
+                <View style={styles.progressBarBg}>
+                  <View style={[styles.progressBarFillSuccess, { width: `${wordLimitProgress}%` }]} />
+                </View>
+              )}
+            </View>
+
+            {isKeyboardVisible && (
+              <TouchableOpacity
+                onPress={Keyboard.dismiss}
+                style={styles.dismissBtn}
+                activeOpacity={0.7}
+              >
+                <ChevronDown size={18} color={theme.colors.textSecondary} />
+              </TouchableOpacity>
             )}
           </View>
         </View>
@@ -248,7 +275,7 @@ export const EditorScreen = ({ route, navigation }: any) => {
             <Text style={[styles.toolLabel, { color: theme.colors.crimson }]}>{t('editor.clear')}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setIsAiVisible(true)} style={[styles.toolButton, styles.aiButton]} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => { Keyboard.dismiss(); setIsAiVisible(true); }} style={[styles.toolButton, styles.aiButton]} activeOpacity={0.7}>
             <Sparkles size={20} color={theme.colors.primary} />
             <Text style={[styles.toolLabel, { color: theme.colors.primary }]}>{t('editor.aiAssistant')}</Text>
           </TouchableOpacity>
@@ -461,6 +488,12 @@ const styles = StyleSheet.create({
   },
   progressContainer: {
     width: 100,
+  },
+  dismissBtn: {
+    marginLeft: theme.spacing.sm,
+    padding: 4,
+    borderRadius: theme.borderRadius.sm,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
   },
   progressBarBg: {
     height: 6,
