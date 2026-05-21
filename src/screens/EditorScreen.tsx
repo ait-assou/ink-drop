@@ -21,6 +21,7 @@ import { AIAssistant } from '../components/AIAssistant';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { HighlightText } from '../components/HighlightText';
+import { getLocalizedPrompt } from '../utils/promptHelpers';
 const MOOD_TAG_OPTIONS = [
   'Melancholic', 'Eerie', 'Hopeful', 'Romantic', 'Absurd',
   'Tense', 'Poetic', 'Relatable', 'Cinematic', 'Mysterious',
@@ -177,23 +178,28 @@ export const EditorScreen = ({ route, navigation }: any) => {
         </View>
 
         {/* Floating Prompt Reminder */}
-        <Card variant="secondary" style={styles.promptReminder}>
-          <View style={styles.promptReminderHeader}>
-            <Text style={styles.promptReminderTag}>{prompt.category.toUpperCase()}</Text>
-            <Text style={styles.promptTitle}>{prompt.title}</Text>
-          </View>
-          <Text style={styles.promptText} numberOfLines={2}>
-            “{prompt.text}”
-          </Text>
-          {prompt.constraint && (
-            <View style={styles.editorConstraint}>
-              <HighlightText 
-                text={`Challenge: ${prompt.constraint}`} 
-                style={styles.editorConstraintText} 
-              />
-            </View>
-          )}
-        </Card>
+        {(() => {
+          const lp = getLocalizedPrompt(prompt, t);
+          return (
+            <Card variant="secondary" style={styles.promptReminder}>
+              <View style={styles.promptReminderHeader}>
+                <Text style={styles.promptReminderTag}>{t('genre.' + lp.category).toUpperCase()}</Text>
+                <Text style={styles.promptTitle}>{lp.title}</Text>
+              </View>
+              <Text style={styles.promptText} numberOfLines={2}>
+                "{lp.text}"
+              </Text>
+              {lp.constraint && (
+                <View style={styles.editorConstraint}>
+                  <HighlightText
+                    text={`${t('prompt.challenge')}: ${lp.constraint}`}
+                    style={styles.editorConstraintText}
+                  />
+                </View>
+              )}
+            </Card>
+          );
+        })()}
 
         {/* Text Area */}
         <View style={styles.inputContainer}>

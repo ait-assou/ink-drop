@@ -40,7 +40,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
         <View style={styles.promptContainer}>
           <Text style={styles.promptPrefix}>{t('profile.inspiredBy')}</Text>
           <Text style={styles.promptText} numberOfLines={isDetailedView ? undefined : 2}>
-            “{story.promptText}”
+            “{t(`prompt.${story.promptId}.text`) !== `prompt.${story.promptId}.text` ? t(`prompt.${story.promptId}.text`) : story.promptText}”
           </Text>
         </View>
 

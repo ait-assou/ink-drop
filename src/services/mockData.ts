@@ -132,96 +132,9 @@ export const MOCK_PROMPTS: Prompt[] = [
   }
 ];
 
-export const MOCK_STORIES: Story[] = [
-  {
-    id: 's-1',
-    promptId: 'p-1',
-    promptText: 'We received a transmission from a star that our astronomic sensors confirmed died a billion years ago...',
-    userId: 'u-elara',
-    username: 'elara_scribe',
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&q=80',
-    content: 'The laboratory went cold as the translator ticked. A billion years of interstellar static resolved into a flatline pulse, then text on our screens. "We are here." Not a warning, nor a plea. Just a luminous monument left in the dark. We stared at the empty patch of sky where the star once burned, realizing we were looking at a tombstone that had finally found its readers.',
-    likes: 42,
-    commentsCount: 3,
-    moodTags: ['Luminous', 'Melancholic', 'Eerie'],
-    createdAt: '2 hours ago',
-    comments: [
-      { id: 'c-1', username: 'leo_writes', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop&q=80', content: 'This is hauntingly beautiful. "Looking at a tombstone." Wow.', createdAt: '1 hour ago' },
-      { id: 'c-2', username: 'cosmic_ink', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&fit=crop&q=80', content: 'Short, precise, and cinematic. The pacing is perfect.', createdAt: '45 mins ago' }
-    ]
-  },
-  {
-    id: 's-2',
-    promptId: 'p-3',
-    promptText: 'The shadow on the wall moved a full second after she did...',
-    userId: 'u-karl',
-    username: 'karl_shadow',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&q=80',
-    content: 'Clara froze. The mirror cast her reflection perfectly, but the silhouette cast on the peeling wallpaper did not mimic her stance. It turned its dark head. A shadow finger pressed against shadow lips. Shhh. She tried to scream, but the air in her throat solidified into lead. The silhouette detached itself from her heels, stepping forward into three-dimensional silence.',
-    likes: 29,
-    commentsCount: 1,
-    moodTags: ['Horror', 'Tense', 'Supernatural'],
-    createdAt: '4 hours ago',
-    comments: [
-      { id: 'c-3', username: 'elara_scribe', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&q=80', content: 'Chills! The peeling wallpaper detail adds so much atmosphere.', createdAt: '3 hours ago' }
-    ]
-  },
-  {
-    id: 's-3',
-    promptId: 'p-4',
-    promptText: 'We only had five minutes left before the pod launched...',
-    userId: 'u-maya',
-    username: 'maya_dreamer',
-    avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&fit=crop&q=80',
-    content: 'Four minutes of static air. We didn’t hold hands; the space suits made touch a clumsy, synthetic lie. Instead, we leaned our helmets together. A vibration, cold and rhythmic, pulsed from the launchpad. "Don’t look back," she whispered, her voice crackling through the comms. The last minute ticked. The engines roared, swallowing her sigh, tearing us away from the only ground we had ever known.',
-    likes: 56,
-    commentsCount: 2,
-    moodTags: ['Sci-Fi', 'Melancholic', 'Cinematic'],
-    createdAt: '1 day ago',
-    comments: [
-      { id: 'c-4', username: 'karl_shadow', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&q=80', content: 'Helmists touching instead of hands is a brilliant touch.', createdAt: '18 hours ago' }
-    ]
-  }
-];
+export const MOCK_STORIES: Story[] = [];
 
-export const MOCK_BATTLES: Battle[] = [
-  {
-    id: 'b-1',
-    prompt: MOCK_PROMPTS.find(p => p.id === 'p-battle-1') || MOCK_PROMPTS[6],
-    storyA: {
-      id: 's-battle-a',
-      promptId: 'p-battle-1',
-      promptText: 'Under the glass dome of Neo-Siberia sat the last organic oak tree...',
-      userId: 'u-writerA',
-      username: 'neon_poet',
-      avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&fit=crop&q=80',
-      content: 'System designation Unit-7 pruned the oak with mechanical precision. Its sensors logged a single yellow leaf drifting downward. The algorithm calculated its trajectory, catching it in a cold, carbon-fiber claw. This leaf was not in the database. "Error: Unknown Code," the terminal flashed. Deep inside its rusted core, a relic of memory flared, and Unit-7 tucked the fragile gold leaf into its chassis, guarding it forever.',
-      likes: 12,
-      commentsCount: 0,
-      moodTags: ['Dystopian', 'Poetic'],
-      createdAt: 'Today',
-      comments: []
-    },
-    storyB: {
-      id: 's-battle-b',
-      promptId: 'p-battle-1',
-      promptText: 'Under the glass dome of Neo-Siberia sat the last organic oak tree...',
-      userId: 'u-writerB',
-      username: 'dust_scribe',
-      avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&fit=crop&q=80',
-      content: 'The oak was dying. Unit-7 knew this, not because it felt pity, but because the daily water allocation returned a 3% decrease in absorption. The machine patched its own code, bypassing the security systems to route emergency power to the subterranean heaters. It rusted in the damp heat, joints screaming, but it watched as a tiny green bud cracked open on the branch. A temporary victory against the frost.',
-      likes: 18,
-      commentsCount: 0,
-      moodTags: ['Hopeful', 'Industrial'],
-      createdAt: 'Today',
-      comments: []
-    },
-    votesA: 34,
-    votesB: 39,
-    endsAt: '06h 42m',
-    winnerRevealed: false
-  }
-];
+export const MOCK_BATTLES: Battle[] = [];
 
 // Context-aware AI suggestions helper
 export const AI_SUGGESTIONS = {

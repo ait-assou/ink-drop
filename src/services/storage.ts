@@ -2,11 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Story, Prompt, Battle, Badge, UserStats, MOCK_STORIES, MOCK_BATTLES, INITIAL_BADGES } from './mockData';
 
 const KEYS = {
-  USER_STATS: '@inkdrop:user_stats_v1',
-  STORIES: '@inkdrop:stories_v1',
-  DRAFTS: '@inkdrop:drafts_v1',
-  BATTLES: '@inkdrop:battles_v1',
-  INITIALIZED: '@inkdrop:initialized_v1',
+  USER_STATS: '@inkdrop:user_stats_v2',
+  STORIES: '@inkdrop:stories_v2',
+  DRAFTS: '@inkdrop:drafts_v2',
+  BATTLES: '@inkdrop:battles_v2',
+  INITIALIZED: '@inkdrop:initialized_v2',
 };
 
 export async function initializeStorage(): Promise<boolean> {
@@ -19,7 +19,7 @@ export async function initializeStorage(): Promise<boolean> {
         level: 1,
         xp: 0,
         nextLevelXp: 500,
-        streak: 3, // Start with a small streak to make it interesting
+        streak: 0,
         totalStories: 0,
         favoriteGenres: [],
         writingGoal: 'daily',

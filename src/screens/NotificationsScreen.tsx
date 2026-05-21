@@ -22,40 +22,7 @@ interface NotificationItem {
   isRead: boolean;
 }
 
-const INITIAL_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: 'n-1',
-    type: 'battle',
-    title: 'Story Battle Victory!',
-    body: 'Your story for "The Last Tree" won the battle against @dust_scribe with 52% of votes. (+200 XP awarded)',
-    time: '2 hours ago',
-    isRead: false,
-  },
-  {
-    id: 'n-2',
-    type: 'comment',
-    title: 'New Critique Received',
-    body: '@elara_scribe left a comment: "This is hauntingly beautiful... The ending detail adds so much atmosphere."',
-    time: '4 hours ago',
-    isRead: false,
-  },
-  {
-    id: 'n-3',
-    type: 'like',
-    title: 'Story Liked',
-    body: '@cosmic_ink and 5 others liked your story "Out of Sync".',
-    time: '1 day ago',
-    isRead: true,
-  },
-  {
-    id: 'n-4',
-    type: 'badge',
-    title: 'Badge Unlocked: Ink Spiller',
-    body: 'Congratulations! You unlocked the "Ink Spiller" badge for publishing your first story.',
-    time: '2 days ago',
-    isRead: true,
-  },
-];
+const INITIAL_NOTIFICATIONS: NotificationItem[] = [];
 
 export const NotificationsScreen = () => {
   const { t } = useTranslation();

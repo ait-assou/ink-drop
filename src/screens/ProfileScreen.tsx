@@ -33,6 +33,7 @@ import { theme } from '../theme/theme';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Badge, MOCK_PROMPTS } from '../services/mockData';
+import { getLocalizedPrompt } from '../utils/promptHelpers';
 export const ProfileScreen = ({ navigation }: any) => {
   const { userStats, stories, drafts, deleteDraft, resetApp } = useApp();
   const { t, language, setLanguage } = useTranslation();
@@ -224,11 +225,12 @@ export const ProfileScreen = ({ navigation }: any) => {
         ) : (
           userDraftKeys.map(key => {
             const matchedPrompt = MOCK_PROMPTS.find(p => p.id === key);
+            const localizedMatchedPrompt = matchedPrompt ? getLocalizedPrompt(matchedPrompt, t) : undefined;
             return (
               <Card key={key} variant="surface" style={styles.draftCard}>
                 <View style={styles.draftInfo}>
                   <Text style={styles.draftPromptCategory}>
-                    {matchedPrompt?.category.toUpperCase() || 'PROMPT'}
+                    {localizedMatchedPrompt ? t('genre.' + localizedMatchedPrompt.category).toUpperCase() : 'PROMPT'}
                   </Text>
                   <Text style={styles.draftSnippet} numberOfLines={1}>
                     {drafts[key]}
@@ -265,7 +267,7 @@ export const ProfileScreen = ({ navigation }: any) => {
         ) : (
           userStories.map(story => (
             <Card key={story.id} variant="surface" style={styles.userStoryCard}>
-              <Text style={styles.userStoryPrompt}>{t('profile.inspiredBy')} "{story.promptText}"</Text>
+              <Text style={styles.userStoryPrompt}>{t('profile.inspiredBy')} "{t(`prompt.${story.promptId}.text`) !== `prompt.${story.promptId}.text` ? t(`prompt.${story.promptId}.text`) : story.promptText}"</Text>
               <Text style={styles.userStoryBody} numberOfLines={3}>
                 {story.content}
               </Text>

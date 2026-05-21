@@ -17,6 +17,7 @@ import { useTranslation } from '../i18n/LanguageContext';
 import { theme } from '../theme/theme';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
+import { getLocalizedPrompt } from '../utils/promptHelpers';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export const BattleScreen = () => {
@@ -86,19 +87,24 @@ export const BattleScreen = () => {
         </View>
 
         {/* The Prompt Card */}
-        <Card variant="secondary" style={styles.promptContainer}>
-          <View style={styles.promptHeader}>
-            <View style={styles.battleBadge}>
-              <Text style={styles.battleBadgeText}>{t('battle.promptBadge')}</Text>
-            </View>
-            <Text style={styles.timerText}>{t('battle.endsIn')} {currentBattle.endsAt}</Text>
-          </View>
-          <Text style={styles.promptTitle}>{currentBattle.prompt.title}</Text>
-          <Text style={styles.promptText}>“{currentBattle.prompt.text}”</Text>
-          {currentBattle.prompt.constraint && (
-            <Text style={styles.constraintText}>Constraint: {currentBattle.prompt.constraint}</Text>
-          )}
-        </Card>
+        {(() => {
+          const lp = getLocalizedPrompt(currentBattle.prompt, t);
+          return (
+            <Card variant="secondary" style={styles.promptContainer}>
+              <View style={styles.promptHeader}>
+                <View style={styles.battleBadge}>
+                  <Text style={styles.battleBadgeText}>{t('battle.promptBadge')}</Text>
+                </View>
+                <Text style={styles.timerText}>{t('battle.endsIn')} {currentBattle.endsAt}</Text>
+              </View>
+              <Text style={styles.promptTitle}>{lp.title}</Text>
+              <Text style={styles.promptText}>"{lp.text}"</Text>
+              {lp.constraint && (
+                <Text style={styles.constraintText}>{t('prompt.constraint')}: {lp.constraint}</Text>
+              )}
+            </Card>
+          );
+        })()}
 
         {/* Versus Swiper Nav */}
         <View style={styles.switcherContainer}>

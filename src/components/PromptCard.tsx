@@ -7,6 +7,7 @@ import { Prompt } from '../services/mockData';
 import { Sparkles, HelpCircle } from 'lucide-react-native';
 import { useTranslation } from '../i18n/LanguageContext';
 import { HighlightText } from './HighlightText';
+import { getLocalizedPrompt } from '../utils/promptHelpers';
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -22,6 +23,7 @@ export const PromptCard: React.FC<PromptCardProps> = ({
   onResumeDraft,
 }) => {
   const { t } = useTranslation();
+  const localizedPrompt = getLocalizedPrompt(prompt, t);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -46,26 +48,26 @@ export const PromptCard: React.FC<PromptCardProps> = ({
     }
   };
 
-  const catColor = getCategoryColor(prompt.category);
+  const catColor = getCategoryColor(localizedPrompt.category);
 
   return (
     <Card borderGradient glow style={styles.card}>
       <View style={styles.header}>
         <View style={[styles.badge, { backgroundColor: `${catColor}15`, borderColor: `${catColor}40` }]}>
           <Text style={[styles.badgeText, { color: catColor }]}>
-            {prompt.category.toUpperCase()}
+            {t('genre.' + localizedPrompt.category).toUpperCase()}
           </Text>
         </View>
         <Sparkles size={16} color={catColor} />
       </View>
 
-      <Text style={styles.title}>{prompt.title}</Text>
-      <Text style={styles.promptText}>“{prompt.text}”</Text>
+      <Text style={styles.title}>{localizedPrompt.title}</Text>
+      <Text style={styles.promptText}>“{localizedPrompt.text}”</Text>
 
-      {prompt.constraint && (
+      {localizedPrompt.constraint && (
         <View style={styles.constraintContainer}>
           <HelpCircle size={14} color={theme.colors.primary} />
-          <HighlightText text={`Challenge: ${prompt.constraint}`} style={styles.constraintText} />
+          <HighlightText text={`${t('prompt.challenge')}: ${localizedPrompt.constraint}`} style={styles.constraintText} />
         </View>
       )}
 
