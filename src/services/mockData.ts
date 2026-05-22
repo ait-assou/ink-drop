@@ -54,6 +54,7 @@ export interface Badge {
 
 export interface UserStats {
   username: string;
+  avatarUrl?: string;
   level: number;
   xp: number;
   nextLevelXp: number;

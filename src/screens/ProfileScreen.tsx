@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   FlatList,
-  Alert
+  TextInput,
 } from 'react-native';
 import {
   Flame,
@@ -32,12 +32,23 @@ import { useTranslation } from '../i18n/LanguageContext';
 import { theme } from '../theme/theme';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { Badge, MOCK_PROMPTS } from '../services/mockData';
 import { getLocalizedPrompt } from '../utils/promptHelpers';
 export const ProfileScreen = ({ navigation }: any) => {
   const { userStats, stories, drafts, deleteDraft, resetApp } = useApp();
+  const { updateUserProfile } = useApp();
   const { t, language, setLanguage } = useTranslation();
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null);
+  
+  // Dialog states
+  const [isDeleteDraftDialogVisible, setIsDeleteDraftDialogVisible] = useState(false);
+  const [isResetDialogVisible, setIsResetDialogVisible] = useState(false);
+  const [isResetSuccessDialogVisible, setIsResetSuccessDialogVisible] = useState(false);
+  const [draftToDelete, setDraftToDelete] = useState<string | null>(null);
+  const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
+  const [editUsername, setEditUsername] = useState('');
+  const [editAvatarUrl, setEditAvatarUrl] = useState('');
 
   // Filter user stories
   const userStories = stories.filter(s => s.userId === 'u-current');
@@ -75,36 +86,26 @@ export const ProfileScreen = ({ navigation }: any) => {
   };
 
   const handleDeleteDraft = (promptId: string) => {
-    Alert.alert(
-      t('profile.deleteDraftTitle'),
-      t('profile.deleteDraftBody'),
-      [
-        { text: t('profile.cancel'), style: 'cancel' },
-        {
-          text: t('profile.delete'),
-          style: 'destructive',
-          onPress: () => deleteDraft(promptId),
-        },
-      ]
-    );
+    setDraftToDelete(promptId);
+    setIsDeleteDraftDialogVisible(true);
   };
 
   const handleReset = () => {
-    Alert.alert(
-      t('profile.resetTitle'),
-      t('profile.resetBody'),
-      [
-        { text: t('profile.cancel'), style: 'cancel' },
-        {
-          text: t('profile.resetConfirm'),
-          style: 'destructive',
-          onPress: async () => {
-            await resetApp();
-            Alert.alert(t('profile.resetSuccess'), t('profile.resetSuccessBody'));
-          },
-        },
-      ]
-    );
+    setIsResetDialogVisible(true);
+  };
+
+  const confirmDeleteDraft = async () => {
+    if (draftToDelete) {
+      deleteDraft(draftToDelete);
+      setIsDeleteDraftDialogVisible(false);
+      setDraftToDelete(null);
+    }
+  };
+
+  const confirmReset = async () => {
+    setIsResetDialogVisible(false);
+    await resetApp();
+    setIsResetSuccessDialogVisible(true);
   };
 
   const xpPercent = userStats ? (userStats.xp / userStats.nextLevelXp) * 100 : 0;
@@ -118,6 +119,14 @@ export const ProfileScreen = ({ navigation }: any) => {
           <TouchableOpacity onPress={handleReset} style={styles.settingsIcon} activeOpacity={0.7}>
             <RotateCcw size={18} color={theme.colors.textSecondary} />
             <Text style={styles.actionText}>{t('profile.resetDemo')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            setEditUsername(userStats?.username || '');
+            setEditAvatarUrl(userStats?.avatarUrl || '');
+            setIsEditProfileVisible(true);
+          }} style={[styles.settingsIcon, { marginLeft: 12 }]} activeOpacity={0.7}>
+            <Edit2 size={16} color={theme.colors.textSecondary} />
+            <Text style={styles.actionText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
 
@@ -148,10 +157,16 @@ export const ProfileScreen = ({ navigation }: any) => {
 
         {/* User Card */}
         <View style={styles.userHeader}>
-          <Image
-            source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&fit=crop&q=80' }}
-            style={styles.avatar}
-          />
+          {userStats && userStats.avatarUrl && userStats.avatarUrl.length > 0 ? (
+            <Image
+              source={{ uri: userStats.avatarUrl }}
+              style={styles.avatar}
+            />
+          ) : (
+            <View style={styles.initialAvatar}>
+              <Text style={styles.initialText}>{(userStats?.username || 'S').charAt(0).toUpperCase()}</Text>
+            </View>
+          )}
           <Text style={styles.userName}>{userStats?.username || 'Scribe'}</Text>
           <Text style={styles.userRank}>{getRank(userStats?.level || 1)}</Text>
         </View>
@@ -311,6 +326,101 @@ export const ProfileScreen = ({ navigation }: any) => {
           </View>
         </Modal>
       )}
+
+      {/* Edit Profile Modal */}
+      <Modal
+        visible={isEditProfileVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setIsEditProfileVisible(false)}
+      >
+        <View style={styles.editModalBackdrop}>
+          <View style={styles.editModalContent}>
+            <Text style={styles.sectionTitle}>Edit Profile</Text>
+            <TextInput
+              value={editUsername}
+              onChangeText={setEditUsername}
+              placeholder="Username"
+              style={styles.input}
+              placeholderTextColor={theme.colors.textMuted}
+            />
+            <TextInput
+              value={editAvatarUrl}
+              onChangeText={setEditAvatarUrl}
+              placeholder="Avatar URL (leave blank for initials)"
+              style={styles.input}
+              placeholderTextColor={theme.colors.textMuted}
+            />
+            <View style={{ flexDirection: 'row', marginTop: theme.spacing.md }}>
+              <Button title="Cancel" variant="ghost" onPress={() => setIsEditProfileVisible(false)} style={{ flex: 1, marginRight: theme.spacing.sm }} />
+              <Button
+                title="Save"
+                variant="filled"
+                onPress={async () => {
+                  await updateUserProfile(editUsername, editAvatarUrl);
+                  setIsEditProfileVisible(false);
+                }}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Delete Draft Confirmation Dialog */}
+      <ConfirmDialog
+        visible={isDeleteDraftDialogVisible}
+        title={t('profile.deleteDraftTitle')}
+        message={t('profile.deleteDraftBody')}
+        onRequestClose={() => setIsDeleteDraftDialogVisible(false)}
+        buttons={[
+          {
+            text: t('profile.cancel'),
+            style: 'cancel',
+            onPress: () => setIsDeleteDraftDialogVisible(false),
+          },
+          {
+            text: t('profile.delete'),
+            style: 'destructive',
+            onPress: confirmDeleteDraft,
+          },
+        ]}
+      />
+
+      {/* Reset Confirmation Dialog */}
+      <ConfirmDialog
+        visible={isResetDialogVisible}
+        title={t('profile.resetTitle')}
+        message={t('profile.resetBody')}
+        onRequestClose={() => setIsResetDialogVisible(false)}
+        buttons={[
+          {
+            text: t('profile.cancel'),
+            style: 'cancel',
+            onPress: () => setIsResetDialogVisible(false),
+          },
+          {
+            text: t('profile.resetConfirm'),
+            style: 'destructive',
+            onPress: confirmReset,
+          },
+        ]}
+      />
+
+      {/* Reset Success Dialog */}
+      <ConfirmDialog
+        visible={isResetSuccessDialogVisible}
+        title={t('profile.resetSuccess')}
+        message={t('profile.resetSuccessBody')}
+        onRequestClose={() => setIsResetSuccessDialogVisible(false)}
+        buttons={[
+          {
+            text: 'OK',
+            style: 'default',
+            onPress: () => setIsResetSuccessDialogVisible(false),
+          },
+        ]}
+      />
     </SafeAreaView>
   );
 };
@@ -352,6 +462,21 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.primary,
     backgroundColor: theme.colors.border,
+  },
+  initialAvatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  initialText: {
+    fontFamily: theme.fonts.sansBold,
+    color: theme.colors.primary,
+    fontSize: 32,
   },
   userName: {
     fontFamily: theme.fonts.sansBold,
@@ -624,5 +749,31 @@ const styles = StyleSheet.create({
   },
   langBtnTextActive: {
     color: '#FFFFFF',
+  },
+  editModalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing.lg,
+  },
+  editModalContent: {
+    width: '100%',
+    maxWidth: 420,
+    backgroundColor: theme.colors.surfaceSecondary,
+    borderRadius: theme.borderRadius.xl,
+    padding: theme.spacing.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  input: {
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
   },
 });

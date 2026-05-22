@@ -18,6 +18,7 @@ interface AppContextProps {
   voteInBattle: (battleId: string, selection: 'A' | 'B') => Promise<void>;
   addXp: (amount: number) => Promise<void>;
   resetApp: () => Promise<void>;
+  updateUserProfile: (username?: string, avatarUrl?: string) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -60,6 +61,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const saveStatsHelper = async (updated: UserStats) => {
     setUserStatsState(updated);
     await storage.saveUserStats(updated);
+  };
+
+  const updateUserProfile = async (username?: string, avatarUrl?: string) => {
+    if (!userStats) return;
+    const updated: UserStats = {
+      ...userStats,
+      username: username !== undefined ? (username || 'Scribe') : userStats.username,
+      avatarUrl: avatarUrl !== undefined ? avatarUrl : userStats.avatarUrl,
+    };
+    await saveStatsHelper(updated);
   };
 
   const completeOnboarding = async (username: string, favoriteGenres: string[], writingGoal: string) => {
@@ -148,7 +159,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       promptText,
       userId: 'u-current',
       username: userStats.username,
-      avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&fit=crop&q=80', // clean avatar
+      avatarUrl: userStats.avatarUrl && userStats.avatarUrl.length > 0 ? userStats.avatarUrl : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&fit=crop&q=80', // fallback
       content,
       likes: 0,
       commentsCount: 0,
@@ -233,7 +244,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newComment: Comment = {
       id: `c-user-${Date.now()}`,
       username: userStats.username,
-      avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&fit=crop&q=80',
+      avatarUrl: userStats.avatarUrl && userStats.avatarUrl.length > 0 ? userStats.avatarUrl : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&fit=crop&q=80',
       content,
       createdAt: 'Just now',
     };
@@ -317,6 +328,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         voteInBattle,
         addXp,
         resetApp,
+        updateUserProfile,
       }}
     >
       {children}

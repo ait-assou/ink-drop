@@ -360,6 +360,59 @@ export const EditorScreen = ({ route, navigation }: any) => {
           </Animated.View>
         </View>
       </Modal>
+
+      {/* Clear Confirmation Dialog */}
+      <ConfirmDialog
+        visible={isClearDialogVisible}
+        title={t('editor.clearConfirmTitle')}
+        message={t('editor.clearConfirmBody')}
+        onRequestClose={() => setIsClearDialogVisible(false)}
+        buttons={[
+          {
+            text: t('editor.cancel'),
+            style: 'cancel',
+            onPress: () => setIsClearDialogVisible(false),
+          },
+          {
+            text: t('editor.clear'),
+            style: 'destructive',
+            onPress: () => {
+              setContent('');
+              setIsClearDialogVisible(false);
+            },
+          },
+        ]}
+      />
+
+      {/* Tag Limit Dialog */}
+      <ConfirmDialog
+        visible={isTagLimitDialogVisible}
+        title={t('editor.tagLimitTitle')}
+        message={t('editor.tagLimitBody')}
+        onRequestClose={() => setIsTagLimitDialogVisible(false)}
+        buttons={[
+          {
+            text: 'OK',
+            style: 'default',
+            onPress: () => setIsTagLimitDialogVisible(false),
+          },
+        ]}
+      />
+
+      {/* Word Count Limit Dialog */}
+      <ConfirmDialog
+        visible={isLengthDialogVisible}
+        title={t('editor.invalidLengthTitle')}
+        message={t('editor.invalidLengthBody')}
+        onRequestClose={() => setIsLengthDialogVisible(false)}
+        buttons={[
+          {
+            text: 'OK',
+            style: 'default',
+            onPress: () => setIsLengthDialogVisible(false),
+          },
+        ]}
+      />
     </SafeAreaView>
   );
 };

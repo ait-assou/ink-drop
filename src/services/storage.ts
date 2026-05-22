@@ -16,6 +16,7 @@ export async function initializeStorage(): Promise<boolean> {
       // Seed initial data
       const defaultStats: UserStats = {
         username: 'AnonymousScribe',
+        avatarUrl: '',
         level: 1,
         xp: 0,
         nextLevelXp: 500,
