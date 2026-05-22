@@ -10,6 +10,7 @@ import {
   Modal,
   FlatList,
   TextInput,
+  Alert,
 } from 'react-native';
 import {
   Flame,
@@ -35,6 +36,7 @@ import { Button } from '../components/Button';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { Badge, MOCK_PROMPTS } from '../services/mockData';
 import { getLocalizedPrompt } from '../utils/promptHelpers';
+import * as ImagePicker from 'expo-image-picker';
 export const ProfileScreen = ({ navigation }: any) => {
   const { userStats, stories, drafts, deleteDraft, resetApp } = useApp();
   const { updateUserProfile } = useApp();
@@ -49,6 +51,45 @@ export const ProfileScreen = ({ navigation }: any) => {
   const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
   const [editUsername, setEditUsername] = useState('');
   const [editAvatarUrl, setEditAvatarUrl] = useState('');
+
+  const pickImageFromLibrary = async () => {
+    try {
+      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (perm.status !== 'granted') {
+        Alert.alert('Permission required', 'Permission to access photos is required to choose a profile photo.');
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.8,
+      });
+      const canceled = (result as any).canceled ?? (result as any).cancelled;
+      if (!canceled) {
+        const uri = (result as any).assets?.[0]?.uri ?? (result as any).uri;
+        if (uri) setEditAvatarUrl(uri);
+      }
+    } catch (err) {
+      console.error('Image pick error', err);
+    }
+  };
+
+  const takePhotoWithCamera = async () => {
+    try {
+      const perm = await ImagePicker.requestCameraPermissionsAsync();
+      if (perm.status !== 'granted') {
+        Alert.alert('Permission required', 'Permission to use the camera is required to take a photo.');
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync({ quality: 0.8 });
+      const canceled = (result as any).canceled ?? (result as any).cancelled;
+      if (!canceled) {
+        const uri = (result as any).assets?.[0]?.uri ?? (result as any).uri;
+        if (uri) setEditAvatarUrl(uri);
+      }
+    } catch (err) {
+      console.error('Camera error', err);
+    }
+  };
 
   // Filter user stories
   const userStories = stories.filter(s => s.userId === 'u-current');
@@ -120,14 +161,6 @@ export const ProfileScreen = ({ navigation }: any) => {
             <RotateCcw size={18} color={theme.colors.textSecondary} />
             <Text style={styles.actionText}>{t('profile.resetDemo')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            setEditUsername(userStats?.username || '');
-            setEditAvatarUrl(userStats?.avatarUrl || '');
-            setIsEditProfileVisible(true);
-          }} style={[styles.settingsIcon, { marginLeft: 12 }]} activeOpacity={0.7}>
-            <Edit2 size={16} color={theme.colors.textSecondary} />
-            <Text style={styles.actionText}>Edit Profile</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Language Switcher */}
@@ -167,7 +200,22 @@ export const ProfileScreen = ({ navigation }: any) => {
               <Text style={styles.initialText}>{(userStats?.username || 'S').charAt(0).toUpperCase()}</Text>
             </View>
           )}
-          <Text style={styles.userName}>{userStats?.username || 'Scribe'}</Text>
+
+          <View style={styles.usernameWrap}>
+            <Text style={styles.userName} numberOfLines={1} ellipsizeMode="tail">{userStats?.username || 'Scribe'}</Text>
+            <TouchableOpacity
+              style={styles.editInline}
+              onPress={() => {
+                setEditUsername(userStats?.username || '');
+                setEditAvatarUrl(userStats?.avatarUrl || '');
+                setIsEditProfileVisible(true);
+              }}
+              activeOpacity={0.8}
+            >
+              <Edit2 size={20} color={theme.colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.userRank}>{getRank(userStats?.level || 1)}</Text>
         </View>
 
@@ -337,6 +385,13 @@ export const ProfileScreen = ({ navigation }: any) => {
         <View style={styles.editModalBackdrop}>
           <View style={styles.editModalContent}>
             <Text style={styles.sectionTitle}>Edit Profile</Text>
+            {editAvatarUrl ? (
+              <Image source={{ uri: editAvatarUrl }} style={[styles.avatar, { alignSelf: 'center', marginBottom: theme.spacing.sm }]} />
+            ) : null}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing.sm }}>
+              <Button title="Choose Photo" variant="outline" onPress={pickImageFromLibrary} style={{ flex: 1, marginRight: theme.spacing.sm }} />
+              <Button title="Take Photo" variant="outline" onPress={takePhotoWithCamera} style={{ flex: 1 }} />
+            </View>
             <TextInput
               value={editUsername}
               onChangeText={setEditUsername}
@@ -453,6 +508,7 @@ const styles = StyleSheet.create({
   },
   userHeader: {
     alignItems: 'center',
+    position: 'relative',
     marginVertical: theme.spacing.md,
   },
   avatar: {
@@ -462,6 +518,32 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.primary,
     backgroundColor: theme.colors.border,
+  },
+  editProfileBtn: {
+    position: 'absolute',
+    right: theme.spacing.lg,
+    top: 54,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  usernameWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: theme.spacing.sm,
+  },
+  editInline: {
+    marginLeft: 2,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   initialAvatar: {
     width: 80,
