@@ -401,7 +401,11 @@ export const ProfileScreen = ({ navigation }: any) => {
               <Text style={styles.sectionTitle}>Edit Profile</Text>
               {editAvatarUrl ? (
                 <Image source={{ uri: editAvatarUrl }} style={[styles.avatar, { alignSelf: 'center', marginBottom: theme.spacing.sm }]} />
-              ) : null}
+              ) : (
+                <View style={[styles.initialAvatar, { alignSelf: 'center', marginBottom: theme.spacing.sm }]}>
+                  <Text style={styles.initialText}>{(editUsername || 'S').charAt(0).toUpperCase()}</Text>
+                </View>
+              )}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing.sm }}>
                 <Button title="Choose Photo" variant="outline" size="sm" onPress={pickImageFromLibrary} style={{ flex: 1, marginRight: theme.spacing.sm }} />
                 <Button title="Take Photo" variant="outline" size="sm" onPress={takePhotoWithCamera} style={{ flex: 1 }} />
@@ -410,14 +414,6 @@ export const ProfileScreen = ({ navigation }: any) => {
                 value={editUsername}
                 onChangeText={setEditUsername}
                 placeholder="Username"
-                style={styles.input}
-                placeholderTextColor={theme.colors.textMuted}
-                keyboardAppearance="dark"
-              />
-              <TextInput
-                value={editAvatarUrl}
-                onChangeText={setEditAvatarUrl}
-                placeholder="Avatar URL (leave blank for initials)"
                 style={styles.input}
                 placeholderTextColor={theme.colors.textMuted}
                 keyboardAppearance="dark"

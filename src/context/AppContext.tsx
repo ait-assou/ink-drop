@@ -159,7 +159,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       promptText,
       userId: 'u-current',
       username: userStats.username,
-      avatarUrl: userStats.avatarUrl && userStats.avatarUrl.length > 0 ? userStats.avatarUrl : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&fit=crop&q=80', // fallback
+      avatarUrl: userStats.avatarUrl && userStats.avatarUrl.length > 0 ? userStats.avatarUrl : '', // no fallback URL, use initials in UI
       content,
       likes: 0,
       commentsCount: 0,
@@ -244,7 +244,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newComment: Comment = {
       id: `c-user-${Date.now()}`,
       username: userStats.username,
-      avatarUrl: userStats.avatarUrl && userStats.avatarUrl.length > 0 ? userStats.avatarUrl : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&fit=crop&q=80',
+      avatarUrl: userStats.avatarUrl && userStats.avatarUrl.length > 0 ? userStats.avatarUrl : '',
       content,
       createdAt: 'Just now',
     };

@@ -29,7 +29,13 @@ export const StoryCard: React.FC<StoryCardProps> = ({
       <TouchableOpacity onPress={onPress} activeOpacity={onPress ? 0.9 : 1}>
         {/* User Info Header */}
         <View style={styles.header}>
-          <Image source={{ uri: story.avatarUrl }} style={styles.avatar} />
+          {story.avatarUrl && story.avatarUrl.length > 0 ? (
+            <Image source={{ uri: story.avatarUrl }} style={styles.avatar} />
+          ) : (
+            <View style={styles.initialAvatar}>
+              <Text style={styles.initialText}>{(story.username || 'S').charAt(0).toUpperCase()}</Text>
+            </View>
+          )}
           <View style={styles.headerText}>
             <Text style={styles.username}>{story.username}</Text>
             <Text style={styles.timestamp}>{story.createdAt}</Text>
@@ -115,6 +121,21 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: theme.borderRadius.round,
     backgroundColor: theme.colors.border,
+  },
+  initialAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1.5,
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.surfaceSecondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  initialText: {
+    fontFamily: theme.fonts.sansBold,
+    color: theme.colors.primary,
+    fontSize: 16,
   },
   headerText: {
     marginLeft: theme.spacing.sm,

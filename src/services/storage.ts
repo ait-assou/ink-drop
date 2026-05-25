@@ -15,7 +15,7 @@ export async function initializeStorage(): Promise<boolean> {
     if (!isInitialized) {
       // Seed initial data
       const defaultStats: UserStats = {
-        username: 'AnonymousScribe',
+        username: 'Filoti',
         avatarUrl: '',
         level: 1,
         xp: 0,
@@ -33,6 +33,17 @@ export async function initializeStorage(): Promise<boolean> {
       await AsyncStorage.setItem(KEYS.DRAFTS, JSON.stringify({}));
       await AsyncStorage.setItem(KEYS.INITIALIZED, 'true');
       return true;
+    } else {
+      // Migrate existing users if they are still on default username
+      const statsData = await AsyncStorage.getItem(KEYS.USER_STATS);
+      if (statsData) {
+        const stats = JSON.parse(statsData);
+        if (stats.username === 'AnonymousScribe') {
+          stats.username = 'Filoti';
+          stats.avatarUrl = ''; // ensure mocked avatar is removed so initials 'F' are shown
+          await AsyncStorage.setItem(KEYS.USER_STATS, JSON.stringify(stats));
+        }
+      }
     }
     return false;
   } catch (error) {

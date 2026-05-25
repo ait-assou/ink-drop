@@ -24,7 +24,7 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Story } from '../services/mockData';
 export const FeedScreen = ({ navigation }: any) => {
-  const { stories, toggleLikeStory, addCommentToStory } = useApp();
+  const { stories, toggleLikeStory, addCommentToStory, userStats } = useApp();
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState('All');
 
@@ -67,8 +67,8 @@ export const FeedScreen = ({ navigation }: any) => {
       // Manually add the comment locally for instant UI response in the modal
       const newComment = {
         id: `c-temp-${Date.now()}`,
-        username: 'You',
-        avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&fit=crop&q=80',
+        username: userStats?.username || 'You',
+        avatarUrl: userStats?.avatarUrl || '',
         content: commentText.trim(),
         createdAt: 'Just now'
       };
@@ -199,7 +199,13 @@ export const FeedScreen = ({ navigation }: any) => {
                 ) : (
                   activeStory.comments.map((comment, index) => (
                     <View key={comment.id || index} style={styles.commentItem}>
-                      <Image source={{ uri: comment.avatarUrl }} style={styles.commentAvatar} />
+                      {comment.avatarUrl && comment.avatarUrl.length > 0 ? (
+                        <Image source={{ uri: comment.avatarUrl }} style={styles.commentAvatar} />
+                      ) : (
+                        <View style={styles.initialCommentAvatar}>
+                          <Text style={styles.initialCommentText}>{(comment.username || 'S').charAt(0).toUpperCase()}</Text>
+                        </View>
+                      )}
                       <View style={styles.commentDetails}>
                         <View style={styles.commentMeta}>
                           <Text style={styles.commentUser}>{comment.username}</Text>
@@ -373,6 +379,21 @@ const styles = StyleSheet.create({
     height: 28,
     borderRadius: 14,
     backgroundColor: theme.colors.border,
+  },
+  initialCommentAvatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.surfaceSecondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  initialCommentText: {
+    fontFamily: theme.fonts.sansBold,
+    color: theme.colors.primary,
+    fontSize: 12,
   },
   commentDetails: {
     flex: 1,
