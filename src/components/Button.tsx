@@ -36,6 +36,46 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
+  const flattenedStyle = (StyleSheet.flatten(style) || {}) as any;
+  const containerStyle: any = { opacity: disabled ? 0.6 : 1 };
+  const innerStyle: any = {};
+
+  const containerStyleKeys = [
+    'flex',
+    'flexGrow',
+    'flexShrink',
+    'flexBasis',
+    'margin',
+    'marginHorizontal',
+    'marginVertical',
+    'marginTop',
+    'marginBottom',
+    'marginLeft',
+    'marginRight',
+    'width',
+    'height',
+    'minWidth',
+    'maxWidth',
+    'minHeight',
+    'maxHeight',
+    'alignSelf',
+    'position',
+    'top',
+    'bottom',
+    'left',
+    'right',
+    'zIndex',
+    'display',
+  ];
+
+  Object.keys(flattenedStyle).forEach((key) => {
+    if (containerStyleKeys.includes(key)) {
+      containerStyle[key] = flattenedStyle[key];
+    } else {
+      innerStyle[key] = flattenedStyle[key];
+    }
+  });
+
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
       toValue: 0.96,
@@ -60,6 +100,9 @@ export const Button: React.FC<ButtonProps> = ({
     }
     return (
       <Text
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.8}
         style={[
           styles.text,
           styles[`text_${size}`],
@@ -78,28 +121,33 @@ export const Button: React.FC<ButtonProps> = ({
     styles[`button_${size}`],
     variant !== 'gradient' && styles[`button_${variant}`],
     disabled && styles.buttonDisabled,
-    style,
+    innerStyle,
   ];
+
+  const needsStretch = containerStyle.flex !== undefined || containerStyle.width !== undefined;
 
   return (
     <Pressable
       onPress={disabled || loading ? undefined : onPress}
       onPressIn={disabled || loading ? undefined : handlePressIn}
       onPressOut={disabled || loading ? undefined : handlePressOut}
-      style={{ opacity: disabled ? 0.6 : 1 }}
+      style={containerStyle}
     >
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+      <Animated.View style={[
+        { transform: [{ scale: scaleAnim }] },
+        needsStretch && { width: '100%', height: containerStyle.height ? '100%' : undefined }
+      ]}>
         {variant === 'gradient' ? (
           <LinearGradient
             colors={[theme.colors.primary, theme.colors.accent]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={buttonStyle}
+            style={[buttonStyle, needsStretch && { width: '100%', height: containerStyle.height ? '100%' : undefined }]}
           >
             {renderContent()}
           </LinearGradient>
         ) : (
-          <View style={buttonStyle}>
+          <View style={[buttonStyle, needsStretch && { width: '100%', height: containerStyle.height ? '100%' : undefined }]}>
             {renderContent()}
           </View>
         )}

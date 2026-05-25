@@ -11,6 +11,9 @@ import {
   FlatList,
   TextInput,
   Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {
   Flame,
@@ -382,44 +385,59 @@ export const ProfileScreen = ({ navigation }: any) => {
         animationType="slide"
         onRequestClose={() => setIsEditProfileVisible(false)}
       >
-        <View style={styles.editModalBackdrop}>
-          <View style={styles.editModalContent}>
-            <Text style={styles.sectionTitle}>Edit Profile</Text>
-            {editAvatarUrl ? (
-              <Image source={{ uri: editAvatarUrl }} style={[styles.avatar, { alignSelf: 'center', marginBottom: theme.spacing.sm }]} />
-            ) : null}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing.sm }}>
-              <Button title="Choose Photo" variant="outline" onPress={pickImageFromLibrary} style={{ flex: 1, marginRight: theme.spacing.sm }} />
-              <Button title="Take Photo" variant="outline" onPress={takePhotoWithCamera} style={{ flex: 1 }} />
-            </View>
-            <TextInput
-              value={editUsername}
-              onChangeText={setEditUsername}
-              placeholder="Username"
-              style={styles.input}
-              placeholderTextColor={theme.colors.textMuted}
-            />
-            <TextInput
-              value={editAvatarUrl}
-              onChangeText={setEditAvatarUrl}
-              placeholder="Avatar URL (leave blank for initials)"
-              style={styles.input}
-              placeholderTextColor={theme.colors.textMuted}
-            />
-            <View style={{ flexDirection: 'row', marginTop: theme.spacing.md }}>
-              <Button title="Cancel" variant="ghost" onPress={() => setIsEditProfileVisible(false)} style={{ flex: 1, marginRight: theme.spacing.sm }} />
-              <Button
-                title="Save"
-                variant="filled"
-                onPress={async () => {
-                  await updateUserProfile(editUsername, editAvatarUrl);
-                  setIsEditProfileVisible(false);
-                }}
-                style={{ flex: 1 }}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableOpacity
+            style={styles.editModalBackdrop}
+            activeOpacity={1}
+            onPress={Keyboard.dismiss}
+          >
+            <View
+              style={styles.editModalContent}
+              onStartShouldSetResponder={() => true}
+            >
+              <Text style={styles.sectionTitle}>Edit Profile</Text>
+              {editAvatarUrl ? (
+                <Image source={{ uri: editAvatarUrl }} style={[styles.avatar, { alignSelf: 'center', marginBottom: theme.spacing.sm }]} />
+              ) : null}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing.sm }}>
+                <Button title="Choose Photo" variant="outline" size="sm" onPress={pickImageFromLibrary} style={{ flex: 1, marginRight: theme.spacing.sm }} />
+                <Button title="Take Photo" variant="outline" size="sm" onPress={takePhotoWithCamera} style={{ flex: 1 }} />
+              </View>
+              <TextInput
+                value={editUsername}
+                onChangeText={setEditUsername}
+                placeholder="Username"
+                style={styles.input}
+                placeholderTextColor={theme.colors.textMuted}
+                keyboardAppearance="dark"
               />
+              <TextInput
+                value={editAvatarUrl}
+                onChangeText={setEditAvatarUrl}
+                placeholder="Avatar URL (leave blank for initials)"
+                style={styles.input}
+                placeholderTextColor={theme.colors.textMuted}
+                keyboardAppearance="dark"
+              />
+              <View style={{ flexDirection: 'row', marginTop: theme.spacing.md }}>
+                <Button title="Cancel" variant="ghost" size="sm" onPress={() => setIsEditProfileVisible(false)} style={{ flex: 1, marginRight: theme.spacing.sm }} />
+                <Button
+                  title="Save"
+                  variant="filled"
+                  size="sm"
+                  onPress={async () => {
+                    await updateUserProfile(editUsername, editAvatarUrl);
+                    setIsEditProfileVisible(false);
+                  }}
+                  style={{ flex: 1 }}
+                />
+              </View>
             </View>
-          </View>
-        </View>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* Delete Draft Confirmation Dialog */}
